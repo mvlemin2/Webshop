@@ -1,3 +1,7 @@
+.idea
+Webshop.iml
+test
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
