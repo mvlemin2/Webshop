@@ -15,7 +15,7 @@
 - register
 - signIn
 - signOut
-- hulpmethodes: checkUser, validateLogin, checkIsSignedIn
+- hulpmethodes: hashPassword, checkUser, validateLogin, checkIsSignedIn
 
 ## WISHLIST
 - addToWishlist

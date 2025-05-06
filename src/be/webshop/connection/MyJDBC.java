@@ -1,5 +1,8 @@
 package be.webshop.connection;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class MyJDBC {
@@ -29,23 +32,34 @@ public class MyJDBC {
                 //DB-connectie
                 Connection connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
-                //INSERT
-                PreparedStatement insertUser = connection.prepareStatement(
-                        "INSERT INTO " + DB_USERS_TABLE_NAME + "(username, password)" + " VALUES(?, ?)"
-                );
+                    //hash password
+                    String hashedPassword = hashPassword(password);
 
-                //parameters voor INSERT
-                insertUser.setString(1, username);
-                insertUser.setString(2, password);
+                    //INSERT
+                    PreparedStatement insertUser = connection.prepareStatement(
+                            "INSERT INTO " + DB_USERS_TABLE_NAME + "(username, password)" + " VALUES(?, ?)"
+                    );
 
-                //update DB met nieuwe gebruiker
-                insertUser.executeUpdate();
-                return true;
+                    //parameters voor INSERT
+                    insertUser.setString(1, username);
+                    insertUser.setString(2, hashedPassword);
+
+                    //update DB met nieuwe gebruiker
+                    insertUser.executeUpdate();
+                    return true;
             }
-        }catch(SQLException e){
+        }catch(SQLException | NoSuchAlgorithmException e){
             e.printStackTrace();
             }
         return false;
+    }
+
+    //Hash password
+    private static String hashPassword(String password) throws NoSuchAlgorithmException{
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] messageDigest = md.digest(password.getBytes());
+        BigInteger bigInt = new BigInteger(1, messageDigest);
+        return bigInt.toString(16);
     }
 
     // controleren of username al bestaat in DB
@@ -76,19 +90,22 @@ public class MyJDBC {
         try{
             Connection connection = DriverManager.getConnection(DB_URL,DB_USERNAME,DB_PASSWORD);
 
+            //hash password
+            String hashedPassword = hashPassword(password);
+
             //SELECT
             PreparedStatement validateUser = connection.prepareStatement(
                     "SELECT * FROM " + DB_USERS_TABLE_NAME + " WHERE USERNAME = ? AND PASSWORD = ?"
             );
             validateUser.setString(1, username);
-            validateUser.setString(2, password);
+            validateUser.setString(2, hashedPassword);
 
             ResultSet resultSet = validateUser.executeQuery();
 
             if(!resultSet.isBeforeFirst()){
                 return false;
             }
-        }catch(SQLException e){
+        }catch(SQLException | NoSuchAlgorithmException e){
             e.printStackTrace();
         }
         return true;
@@ -327,22 +344,22 @@ public class MyJDBC {
         ////System.out.println(MyJDBC.checkUser("testuser1"));
 
         //check register test
-        ////System.out.println(MyJDBC.register("username","password"));
+        //System.out.println(MyJDBC.register("usernamehashed2","passwordhashed2"));
 
         //check validate login test
         ////System.out.println(MyJDBC.validateLogin("username","password"));
         ////niet gelukt omdat dit binary werd opgeslagen in de DB => verder uitwerken
 
         //check signIn test
-        ////System.out.println(MyJDBC.signIn("username","password"));
+        //System.out.println(MyJDBC.signIn("usernamehashed2","passwordhashed2"));
 
         //check isSignedIn
-        ////System.out.println(MyJDBC.checkIsSignedIn("username123"));
+        //System.out.println(MyJDBC.checkIsSignedIn("usernamehashed2"));
 
         //check SignOut
-//        System.out.println(MyJDBC.checkIsSignedIn("username"));
-//        System.out.println(MyJDBC.signOut("username"));
-//        System.out.println(MyJDBC.checkIsSignedIn("username"));
+//        System.out.println(MyJDBC.checkIsSignedIn("usernamehashed2"));
+//        System.out.println(MyJDBC.signOut("usernamehashed2"));
+//        System.out.println(MyJDBC.checkIsSignedIn("usernamehashed2"));
 
         //check addToWishlist test
         //MyJDBC.signIn("username","password");
@@ -363,6 +380,6 @@ public class MyJDBC {
         //System.out.println(MyJDBC.removeAllFromWishlist("username"));
 
         //test display wishlist
-        MyJDBC.displayWishlist("username123");
+        //MyJDBC.displayWishlist("username123");
     }
 }
