@@ -1,5 +1,6 @@
-package be.webshop.connection;
+package be.webshop.akladblok;
 
+import be.webshop.connection.DatabaseConnection;
 import be.webshop.util.DatabaseUtils;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -435,7 +436,7 @@ public class MyJDBC {
 //        }
 
         //check user test
-        //System.out.println(MyJDBC.checkUser("username1234"));
+        //System.out.println(MyJDBC.checkUser("username123"));
 
         //check register test
         //System.out.println(MyJDBC.register("usernamehashed4","passwordhashed4"));

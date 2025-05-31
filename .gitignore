@@ -31,3 +31,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+/src/be/webshop/resources/
+/src/be/webshop/akladblok/
