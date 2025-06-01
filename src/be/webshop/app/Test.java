@@ -27,8 +27,8 @@ public class Test {
         //Test toevoegen aan winkelmandje
     //        System.out.println(testWishlistService.addToWishlist(4,"usernamehashed4")); //product nog niet in mandje - gebruiker ingelogd -> true
     //        System.out.println(testWishlistService.addToWishlist(4,"usernamehashed")); //product nog niet in mandje - gebruiker niet ingelogd -> false
-    //        System.out.println(testWishlistService.addToWishlist(22,"usernamehashed4")); //product bestaat niet - gebruiker ingelogd => !!!error!!!
-    //        System.out.println(testWishlistService.addToWishlist(7,"usernamehashed4")); //product al in mandje  - gebruiker ingelogd -> geeft false
+    //        System.out.println(testWishlistService.addToWishlist(22,"usernamehashed4")); //product bestaat niet - gebruiker ingelogd -> false
+    //        System.out.println(testWishlistService.addToWishlist(7,"usernamehashed4")); //product al in mandje  - gebruiker ingelogd -> false
 
         //Test verwijderen uit winkelmandje
     //        System.out.println(testWishlistService.removeFromWishlist(4,"usernamehashed4")); //product in mandje - gebruiker ingelogd -> true

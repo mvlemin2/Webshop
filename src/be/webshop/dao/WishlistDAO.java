@@ -33,6 +33,12 @@ public class WishlistDAO {
                         user_id_query = resultSet.getInt("user_id");
                     }
 
+                    //Controleren of product_id bestaat in database
+                    boolean succes = checkProductExists(connection, product_id);
+                    if(!succes){
+                        return false;
+                    }
+
                     addToWishlist = connection.prepareStatement(
                             "INSERT INTO " + DatabaseConstants.WISHLISTLINES_TABLE + "(product_id, user_id) VALUES(?, ?)");
 
@@ -51,6 +57,27 @@ public class WishlistDAO {
             }
         //}
         return false;
+    }
+
+    private boolean checkProductExists(Connection connection, int product_id) throws SQLException {
+        PreparedStatement checkProductExists = null;
+        ResultSet productResult = null;
+
+        try {
+            checkProductExists = connection.prepareStatement(
+                    "SELECT 1 FROM " + DatabaseConstants.PLANTS_TABLE + " WHERE product_id = ?");
+            checkProductExists.setInt(1, product_id);
+            productResult = checkProductExists.executeQuery();
+
+            if (!productResult.next()) {
+                //System.out.println("Product met ID " + product_id + " bestaat niet.");
+                return false;
+            }
+        } finally {
+            DatabaseUtils.closeQuietly(productResult);
+            DatabaseUtils.closeQuietly(checkProductExists);
+        }
+        return true;
     }
 
     private boolean checkInWishlist(int product_id, String username){
@@ -192,7 +219,7 @@ public class WishlistDAO {
                 }
 
                 displayWishlist = connection.prepareStatement(
-                        "SELECT product_id, plantName, plantNameLatin, plantPrice, plantCategory, plantLocation, plantColor, plantDescription " + "FROM " + DatabaseConstants.PLANTS_TABLE + " p " + "JOIN " + DatabaseConstants.WISHLISTLINES_TABLE + " wl ON p.product_id = wl.product_id " + "WHERE wl.user_id = ?");
+                        "SELECT p.product_id, p.plantName, p.plantNameLatin, p.plantPrice, p.plantCategory, p.plantLocation, p.plantColor " + "FROM " + DatabaseConstants.PLANTS_TABLE + " p " + "JOIN " + DatabaseConstants.WISHLISTLINES_TABLE + " wl ON p.product_id = wl.product_id " + "WHERE wl.user_id = ?");
                 displayWishlist.setInt(1, user_id_query);
 
                 wishlist = displayWishlist.executeQuery();

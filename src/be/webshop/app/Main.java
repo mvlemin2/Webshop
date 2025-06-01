@@ -2,6 +2,8 @@ package be.webshop.app;
 
 import be.webshop.service.UserService;
 import be.webshop.service.WishlistService;
+
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -29,7 +31,8 @@ public class Main {
     private static int readMenuOption() {
         try {
             return scannerInt.nextInt();
-        } catch (NumberFormatException e) {
+        } catch (InputMismatchException e) {
+            scannerInt.nextLine();
             return -1;
         }
     }
@@ -64,9 +67,17 @@ public class Main {
 
     //3. Afmelden
     private static void signOut() {
-        System.out.print("Ben je zeker dat je wil uitloggen?");
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
+        System.out.print("Ben je zeker dat je je wil afmelden? (Y/N): ");
+        String answer = scannerText.nextLine();
+        switch (answer){
+            case "Y": break;
+            case "N": return;
+            default:
+                System.out.println("Ongeldige keuze. Terug naar het hoofdmenu.");
+                return;
+        }
         boolean success = userService.signOut(username);
         System.out.println(success ? "Tot ziens, " + username + "! Je bent nu afgemeld." : "Afmelden is niet gelukt. Je was mogelijk reeds afgemeld.");
     }
@@ -88,14 +99,14 @@ public class Main {
     private static void removeFromWishlist() {
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
-        System.out.println("\n");
+        //System.out.println("\n");
         //id-nummers nog toevoegen aan wishlist!!!
         wishlistService.displayWishlist(username);
-        System.out.println("Geef aan welke plant je wil verwijderen uit je verlanglijstje: ");
+        System.out.println("\nGeef aan welke plant je wil verwijderen uit je verlanglijstje: ");
         int plant = scannerInt.nextInt();
         boolean success = wishlistService.removeFromWishlist(plant, username);
         System.out.println(success ? "De plant werd verwijderd uit je verlanglijstje!" : "Verwijderen mislukt. Je bent ofwel niet aangemeld, de plant die je opgaf bestaat niet, of de plant stond niet in je verlanglijstje.");
-        System.out.println("\n");
+        //System.out.println("\n");
         wishlistService.displayWishlist(username);
     }
 
@@ -125,7 +136,7 @@ public class Main {
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
         System.out.println("\n");
-        wishlistService.displayWishlist(username);
+        //wishlistService.displayWishlist(username);
         boolean success = wishlistService.displayWishlist(username);
         if(!success){
             System.out.println("Je bent niet aangemeld.");
