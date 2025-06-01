@@ -170,7 +170,7 @@ public class WishlistDAO {
         return false;
     }
 
-    public void displayWishlist(String username) {
+    public boolean displayWishlist(String username) {
         PreparedStatement getUserID = null;
         PreparedStatement displayWishlist = null;
         ResultSet resultSet = null;
@@ -192,7 +192,7 @@ public class WishlistDAO {
                 }
 
                 displayWishlist = connection.prepareStatement(
-                        "SELECT plantName, plantNameLatin, plantPrice, plantCategory, plantLocation, plantColor, plantDescription " + "FROM " + DatabaseConstants.PLANTS_TABLE + " p " + "JOIN " + DatabaseConstants.WISHLISTLINES_TABLE + " wl ON p.product_id = wl.product_id " + "WHERE wl.user_id = ?");
+                        "SELECT product_id, plantName, plantNameLatin, plantPrice, plantCategory, plantLocation, plantColor, plantDescription " + "FROM " + DatabaseConstants.PLANTS_TABLE + " p " + "JOIN " + DatabaseConstants.WISHLISTLINES_TABLE + " wl ON p.product_id = wl.product_id " + "WHERE wl.user_id = ?");
                 displayWishlist.setInt(1, user_id_query);
 
                 wishlist = displayWishlist.executeQuery();
@@ -208,7 +208,7 @@ public class WishlistDAO {
                     }
                     System.out.println("");
                 }
-
+                return true;
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
@@ -217,8 +217,6 @@ public class WishlistDAO {
                 DatabaseUtils.closeQuietly(wishlist);
                 DatabaseUtils.closeQuietly(displayWishlist);
             }
-//        } else {
-//            System.err.println("Je bent nog niet ingelogd" );
-//        }
+    return false;
     }
 }

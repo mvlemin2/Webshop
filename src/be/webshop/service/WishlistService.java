@@ -33,11 +33,10 @@ public class WishlistService {
         return false;
     }
 
-    public void displayWishlist(String username) {
+    public boolean displayWishlist(String username) {
         if (userService.isSignedIn(username)) {
-            wishlistDAO.displayWishlist(username);
-        } else {
-            System.err.println("Je bent niet ingelogd.");
+            return wishlistDAO.displayWishlist(username);
         }
+        return false;
     }
 }
