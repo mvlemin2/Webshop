@@ -58,7 +58,7 @@ public class UserDAO {
 
     // controleren of username al bestaat in DB
     // true = username bestaat in DB // false = username bestaat nog niet in DB
-    private boolean checkUser(String username){
+    public boolean checkUser(String username){
         PreparedStatement checkUserExists = null;
         ResultSet resultSet = null;
         try{

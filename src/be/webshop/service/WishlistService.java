@@ -1,6 +1,10 @@
 package be.webshop.service;
 
 import be.webshop.dao.WishlistDAO;
+import be.webshop.model.Plant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WishlistService {
 
@@ -33,10 +37,17 @@ public class WishlistService {
         return false;
     }
 
-    public boolean displayWishlist(String username) {
-        if (userService.isSignedIn(username)) {
-            return wishlistDAO.displayWishlist(username);
+//    public boolean displayWishlist(String username) {
+//        if (userService.isSignedIn(username)) {
+//            return wishlistDAO.displayWishlist(username);
+//        }
+//        return false;
+//    }
+
+    public List<Plant> displayWishlist(String username){
+        if(!userService.isSignedIn(username)){
+            return new ArrayList<>(); //Indien de gebruiker niet ingelogd is, is de lijst leeg.
         }
-        return false;
+        return wishlistDAO.displayWishlist(username);
     }
 }

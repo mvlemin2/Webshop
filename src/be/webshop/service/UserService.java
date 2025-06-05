@@ -18,6 +18,10 @@ public class UserService {
         return userDAO.register(username, password);
     }
 
+    public boolean checkUser(String username) {
+        return userDAO.checkUser(username);
+    }
+
     public boolean signIn(String username, String password) {
         return userDAO.signIn(username, password);
     }
