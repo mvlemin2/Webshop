@@ -4,7 +4,6 @@ import be.webshop.dao.PlantDAO;
 import be.webshop.model.Plant;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PlantService {
     private final PlantDAO plantDAO;
@@ -29,5 +28,4 @@ public class PlantService {
         PlantDAO plantDAO = new PlantDAO();
         return plantDAO.searchPlants(keyword);
     }
-
 }

@@ -37,13 +37,6 @@ public class WishlistService {
         return false;
     }
 
-//    public boolean displayWishlist(String username) {
-//        if (userService.isSignedIn(username)) {
-//            return wishlistDAO.displayWishlist(username);
-//        }
-//        return false;
-//    }
-
     public List<Plant> displayWishlist(String username){
         if(!userService.isSignedIn(username)){
             return new ArrayList<>(); //Indien de gebruiker niet ingelogd is, is de lijst leeg.

@@ -3,7 +3,6 @@ package be.webshop.service;
 import be.webshop.dao.UserDAO;
 
 public class UserService {
-
     private final UserDAO userDAO;
 
     public UserService() {

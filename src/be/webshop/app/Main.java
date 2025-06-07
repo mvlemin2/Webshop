@@ -46,7 +46,7 @@ public class Main {
     private static void register() {
         System.out.println("Fijn dat je je wil registreren!");
 
-        // Gebruikersnaam invoeren
+        //Gebruikersnaam invoeren
         System.out.print("Voer een gebruikersnaam in: ");
         String username = scannerText.nextLine().trim();
 
@@ -55,13 +55,13 @@ public class Main {
             return;
         }
 
-        // Controleer of gebruikersnaam al bestaat
+        //Controleren of gebruikersnaam al bestaat
         if (userService.checkUser(username)) {
             System.out.println("Deze gebruikersnaam is al in gebruik. Probeer een andere.");
             return;
         }
 
-        // Wachtwoord invoeren
+        //Wachtwoord invoeren
         System.out.print("Voer een wachtwoord in: ");
         String password = scannerText.nextLine();
 
@@ -70,7 +70,7 @@ public class Main {
             return;
         }
 
-        // Herhaal wachtwoord met maximum 3 pogingen
+        //Wachtwoord herhalen (max 3 pogingen)
         int attempts = 0;
         while (true) {
             System.out.print("Geef het gekozen wachtwoord nogmaals in (of typ 'stop' om te annuleren): ");
@@ -94,7 +94,7 @@ public class Main {
             System.out.println("De wachtwoorden komen niet overeen. Probeer opnieuw.");
         }
 
-        // Registratie uitvoeren
+        //Registreren
         boolean success = userService.register(username, password);
         if (success) {
             System.out.println("Bedankt, " + username + "! Je hebt nu een account aangemaakt op onze website.");
@@ -137,7 +137,7 @@ public class Main {
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
         System.out.println("Geef aan welke plant je wil toevoegen aan je verlanglijstje: ");
-        //Afdruk met overzicht planten invoegen
+
         int plant = scannerInt.nextInt();
         boolean success = wishlistService.addToWishlist(plant, username);
         System.out.println(success ? "De plant werd toegevoegd aan je verlanglijstje!" : "Toevoegen mislukt. Je bent ofwel niet aangemeld, de plant die je opgaf bestaat niet, of de plant stond al in je verlanglijstje.");
@@ -149,14 +149,12 @@ public class Main {
     private static void removeFromWishlist() {
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
-        //System.out.println("\n");
-        //id-nummers nog toevoegen aan wishlist!!!
+
         wishlistService.displayWishlist(username);
         System.out.println("\nGeef aan welke plant je wil verwijderen uit je verlanglijstje: ");
         int plant = scannerInt.nextInt();
         boolean success = wishlistService.removeFromWishlist(plant, username);
         System.out.println(success ? "De plant werd verwijderd uit je verlanglijstje!" : "Verwijderen mislukt. Je bent ofwel niet aangemeld, de plant die je opgaf bestaat niet, of de plant stond niet in je verlanglijstje.");
-        //System.out.println("\n");
         wishlistService.displayWishlist(username);
     }
 
@@ -182,17 +180,6 @@ public class Main {
     }
 
     //7. Bekijk verlanglijstje
-//    private static void displayWishlist() {
-//        System.out.print("Voer je gebruikersnaam in: ");
-//        String username = scannerText.nextLine();
-//        System.out.println("\n");
-//        //wishlistService.displayWishlist(username);
-//        boolean success = wishlistService.displayWishlist(username);
-//        if(!success){
-//            System.out.println("Je bent niet aangemeld.");
-//        }
-//    }
-
     private static void displayWishlist() {
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
@@ -243,13 +230,13 @@ public class Main {
             try {
                 keuze = scannerInt.nextInt();
             } catch (InputMismatchException e) {
-                scannerInt.nextLine(); // buffer leegmaken
+                scannerInt.nextLine();
                 System.out.println("Verkeerde invoer. Probeer opnieuw.");
                 continue;
             }
 
             if (keuze == 0) {
-                return; // terug naar hoofdmenu
+                return; //Terug naar hoofdmenu
             }
 
             String categorie;
@@ -278,7 +265,7 @@ public class Main {
                     System.out.println(plant);
                 }
             }
-            return; // na weergave terug naar hoofdmenu
+            return; //Terug naar hoofdmenu
         }
     }
 
@@ -294,13 +281,13 @@ public class Main {
             try {
                 productId = scannerInt.nextInt();
             } catch (InputMismatchException e) {
-                scannerInt.nextLine(); // buffer leegmaken
+                scannerInt.nextLine();
                 System.out.println("Verkeerde invoer. Probeer opnieuw.");
                 continue;
             }
 
             if (productId == 0) {
-                return; // terug naar hoofdmenu
+                return; //Terug naar hoofdmenu
             }
 
             Plant plant = plantService.getPlantDetails(productId);
@@ -316,7 +303,7 @@ public class Main {
                 System.out.println("Kleur: " + plant.getPlantColor());
                 System.out.println("Prijs: €" + plant.getPlantPrice());
                 System.out.println("Beschrijving: " + plant.getPlantDescription());
-                return; // na succesvolle weergave terug naar hoofdmenu
+                return; //Terug naar hoofdmenu
             }
         }
     }
@@ -342,11 +329,8 @@ public class Main {
                 System.out.println("Beschrijving: " + plant.getPlantDescription());
                 System.out.println("-----------------------------");
             }
-
         }
     }
-
-
 
     public static void main(String[] args) {
         System.out.println("Welkom op onze webshop!");
@@ -373,7 +357,6 @@ public class Main {
                 default -> System.out.println("Ongeldige keuze. Probeer opnieuw.");
             }
         }
-
     }
 }
 

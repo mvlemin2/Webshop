@@ -1,7 +1,6 @@
 package be.webshop.dao;
 
 import be.webshop.model.Plant;
-import be.webshop.service.UserService;
 import be.webshop.connection.DatabaseConnection;
 import be.webshop.util.DatabaseConstants;
 import be.webshop.util.DatabaseUtils;
@@ -11,17 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WishlistDAO {
-    //private final UserService userService = new UserService();
 
+    //4. Toevoegen aan verlanglijstje
     public boolean addToWishlist(int product_id, String username){
         PreparedStatement getUserID = null;
         PreparedStatement addToWishlist = null;
         ResultSet resultSet = null;
-        ////check if user is logged in
-        //if(userService.isSignedIn(username)){
-            //check if product is already added to wishlist
+
+            //Controleren of product reeds werd toegevoegd tot verlanglijstje
             if(!checkInWishlist(product_id, username)){
-                //add to wishlist
                 try {
                     Connection connection = DatabaseConnection.getInstance().getConnection();
 
@@ -58,10 +55,10 @@ public class WishlistDAO {
                     DatabaseUtils.closeQuietly(addToWishlist);
                 }
             }
-        //}
         return false;
     }
 
+    //Controleren of het product bestaat
     private boolean checkProductExists(Connection connection, int product_id) throws SQLException {
         PreparedStatement checkProductExists = null;
         ResultSet productResult = null;
@@ -73,7 +70,6 @@ public class WishlistDAO {
             productResult = checkProductExists.executeQuery();
 
             if (!productResult.next()) {
-                //System.out.println("Product met ID " + product_id + " bestaat niet.");
                 return false;
             }
         } finally {
@@ -83,6 +79,7 @@ public class WishlistDAO {
         return true;
     }
 
+    //Controleren of het product zich reeds in het verlanglijstje bevindt
     private boolean checkInWishlist(int product_id, String username){
         PreparedStatement getUserID = null;
         PreparedStatement checkInWishList = null;
@@ -107,7 +104,6 @@ public class WishlistDAO {
             checkInWishList.setInt(2, user_id_query);
 
             resultSet = checkInWishList.executeQuery();
-            // controleren of result set leeg is -> indien leeg bestaat entry nog niet
             if(!resultSet.isBeforeFirst()){
                 return false;
             }
@@ -122,15 +118,12 @@ public class WishlistDAO {
         return true;
     }
 
+    //5. Verwijderen uit verlanglijstje
     public boolean removeFromWishlist(int product_id, String username){
         PreparedStatement getUserID = null;
         PreparedStatement removeFromWishlist = null;
         ResultSet resultSet = null;
-        ////check if user is logged in
-        //if(userService.isSignedIn(username)){
-            //check if product is already added to wishlist
             if(checkInWishlist(product_id, username)){
-                //remove from wishlist
                 try {
                     Connection connection = DatabaseConnection.getInstance().getConnection();
 
@@ -159,17 +152,14 @@ public class WishlistDAO {
                     DatabaseUtils.closeQuietly(removeFromWishlist);
                 }
             }
-        //}
         return false;
     }
 
+    //6. Alle favorieten verwijderen uit verlanglijstje
     public boolean removeAllFromWishlist(String username){
         PreparedStatement getUserID = null;
         PreparedStatement removeAllFromWishlist = null;
         ResultSet resultSet = null;
-        ////check if user is logged in
-        //if(userService.isSignedIn(username)){
-            //remove all from wishlist
             try {
                 Connection connection = DatabaseConnection.getInstance().getConnection();
 
@@ -196,60 +186,10 @@ public class WishlistDAO {
                 DatabaseUtils.closeQuietly(getUserID);
                 DatabaseUtils.closeQuietly(removeAllFromWishlist);
             }
-        //}
         return false;
     }
 
-//    public boolean displayWishlist(String username) {
-//        PreparedStatement getUserID = null;
-//        PreparedStatement displayWishlist = null;
-//        ResultSet resultSet = null;
-//        ResultSet wishlist = null;
-//        ////check if user is logged in
-//        //if (userService.isSignedIn(username)) {
-//            //display wishlist
-//            try {
-//                Connection connection = DatabaseConnection.getInstance().getConnection();
-//
-//                getUserID = connection.prepareStatement(
-//                        "SELECT user_id FROM " + DatabaseConstants.USERS_TABLE + " WHERE username = ?");
-//                getUserID.setString(1, username);
-//                resultSet = getUserID.executeQuery();
-//
-//                int user_id_query = 0;
-//                while (resultSet.next()) {
-//                    user_id_query = resultSet.getInt("user_id" );
-//                }
-//
-//                displayWishlist = connection.prepareStatement(
-//                        "SELECT p.product_id, p.plantName, p.plantNameLatin, p.plantPrice, p.plantCategory, p.plantLocation, p.plantColor " + "FROM " + DatabaseConstants.PLANTS_TABLE + " p " + "JOIN " + DatabaseConstants.WISHLISTLINES_TABLE + " wl ON p.product_id = wl.product_id " + "WHERE wl.user_id = ?");
-//                displayWishlist.setInt(1, user_id_query);
-//
-//                wishlist = displayWishlist.executeQuery();
-//                ResultSetMetaData rsmd = wishlist.getMetaData();
-//
-//                System.out.println("|| Wishlist van " + username + " ||");
-//                int columnsNumber = rsmd.getColumnCount();
-//                while (wishlist.next()) {
-//                    for (int i = 1; i <= columnsNumber; i++) {
-//                        //if (i > 1) System.out.print(",  ");
-//                        String columnValue = wishlist.getString(i);
-//                        System.out.print(rsmd.getColumnName(i) + ": " + columnValue + " | ");
-//                    }
-//                    System.out.println("");
-//                }
-//                return true;
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            } finally {
-//                DatabaseUtils.closeQuietly(resultSet);
-//                DatabaseUtils.closeQuietly(getUserID);
-//                DatabaseUtils.closeQuietly(wishlist);
-//                DatabaseUtils.closeQuietly(displayWishlist);
-//            }
-//    return false;
-//    }
-
+    //7. Bekijk verlanglijstje
     public List<Plant> displayWishlist(String username) {
         List<Plant> wishlist = new ArrayList<>();
         PreparedStatement getUserID = null;
@@ -303,8 +243,6 @@ public class WishlistDAO {
             DatabaseUtils.closeQuietly(getUserID);
             DatabaseUtils.closeQuietly(getWishlist);
         }
-
         return wishlist;
     }
-
 }

@@ -14,8 +14,7 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
-    // nieuwe gebruiker registreren in de database
-    // true = registratie gelukt // false = registratie niet gelukt
+    //1. Registreren
     public boolean register(String username, String password){
         PreparedStatement insertUser = null;
         try {
@@ -24,19 +23,19 @@ public class UserDAO {
                 //DB-connectie met singleton
                 Connection connection = DatabaseConnection.getInstance().getConnection();
 
-                //hash password
+                //Hashing wachtwoord
                 String hashedPassword = hashPassword(password);
 
-                //INSERT statement voorbereiden
+                //INSERT-statement voorbereiden
                 insertUser = connection.prepareStatement(
                         "INSERT INTO " + DatabaseConstants.USERS_TABLE + "(username, password)" + " VALUES(?, ?)"
                 );
 
-                //parameters voor INSERT statement
+                //Parameters voor INSERT-statement
                 insertUser.setString(1, username);
                 insertUser.setString(2, hashedPassword);
 
-                //update DB met nieuwe gebruiker
+                //DB updaten met nieuwe gebruiker
                 insertUser.executeUpdate();
                 return true;
             }
@@ -48,7 +47,7 @@ public class UserDAO {
         return false;
     }
 
-    //Hash password
+    //Hashing wachtwoord
     private String hashPassword(String password) throws NoSuchAlgorithmException{
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         byte[] messageDigest = md.digest(password.getBytes());
@@ -56,8 +55,7 @@ public class UserDAO {
         return bigInt.toString(16);
     }
 
-    // controleren of username al bestaat in DB
-    // true = username bestaat in DB // false = username bestaat nog niet in DB
+    //Controleren of username al bestaat in de database
     public boolean checkUser(String username){
         PreparedStatement checkUserExists = null;
         ResultSet resultSet = null;
@@ -71,7 +69,7 @@ public class UserDAO {
 
             resultSet = checkUserExists.executeQuery();
 
-            // controleren of result set leeg is -> indien leeg bestaat gebruiker nog niet
+            //Indien ResultSet leeg is, bestaat gebruiker nog niet
             if(!resultSet.isBeforeFirst()){
                 return false;
             }
@@ -84,17 +82,14 @@ public class UserDAO {
         return true;
     }
 
-    //combinatie username en ww controleren in DB
+    //Combinatie username en wachtwoord controleren in de database
     private boolean validateLogin(String username, String password){
         PreparedStatement validateUser = null;
         ResultSet resultSet = null;
         try{
             Connection connection = DatabaseConnection.getInstance().getConnection();
-
-            //hash password
             String hashedPassword = hashPassword(password);
 
-            //SELECT
             validateUser = connection.prepareStatement(
                     "SELECT * FROM " + DatabaseConstants.USERS_TABLE + " WHERE USERNAME = ? AND PASSWORD = ?"
             );
@@ -103,7 +98,6 @@ public class UserDAO {
 
             resultSet = validateUser.executeQuery();
 
-            //Indien geen resultaten, login ongeldig
             if(!resultSet.isBeforeFirst()){
                 return false;
             }
@@ -116,6 +110,7 @@ public class UserDAO {
         return true;
     }
 
+    //2. Aanmelden
     public boolean signIn(String username, String password){
         PreparedStatement signIn = null;
         if(validateLogin(username, password)) {
@@ -137,6 +132,7 @@ public class UserDAO {
         return false;
     }
 
+    //Controleren of gebruiker aangemeld is
     private boolean checkIsSignedIn(String username){
         PreparedStatement checkIsSignedIn = null;
         ResultSet resultSet = null;
@@ -160,11 +156,12 @@ public class UserDAO {
         return false;
     }
 
-    //voor UserService
+    //checkIsSignedIn voor UserService
     public boolean isSignedIn(String username) {
         return checkIsSignedIn(username);
     }
 
+    //3. Afmelden
     public boolean signOut(String username){
         PreparedStatement signOut = null;
         if(checkUser(username) && checkIsSignedIn(username)) {

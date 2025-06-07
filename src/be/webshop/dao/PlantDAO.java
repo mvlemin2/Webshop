@@ -14,7 +14,7 @@ import java.util.List;
 
 public class PlantDAO {
 
-    //Alle planten op het scherm
+    //8. Bekijk alle planten
     public List<Plant> getAllPlants() {
         List<Plant> plants = new ArrayList<>();
         PreparedStatement statement = null;
@@ -51,7 +51,7 @@ public class PlantDAO {
         return plants;
     }
 
-    //De planten per categorie op het scherm
+    //9. Bekijk planten per categorie
     public List<Plant> getPlantsByCategory(String category) {
         List<Plant> plants = new ArrayList<>();
         PreparedStatement statement = null;
@@ -89,6 +89,7 @@ public class PlantDAO {
         return plants;
     }
 
+    //10. Bekijk plantdetails
     public Plant getPlantDetails(int productId) {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -124,6 +125,7 @@ public class PlantDAO {
         return null;
     }
 
+    //11. Zoeken
     public List<Plant> searchPlants(String keyword) {
         List<Plant> plants = new ArrayList<>();
         PreparedStatement statement = null;
@@ -168,10 +170,6 @@ public class PlantDAO {
             DatabaseUtils.closeQuietly(resultSet);
             DatabaseUtils.closeQuietly(statement);
         }
-
         return plants;
     }
-
-
-
 }
