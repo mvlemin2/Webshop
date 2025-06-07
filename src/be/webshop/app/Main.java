@@ -136,26 +136,23 @@ public class Main {
     private static void addToWishlist() {
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
+        displayAllPlants();
         System.out.println("Geef aan welke plant je wil toevoegen aan je verlanglijstje: ");
 
         int plant = scannerInt.nextInt();
         boolean success = wishlistService.addToWishlist(plant, username);
         System.out.println(success ? "De plant werd toegevoegd aan je verlanglijstje!" : "Toevoegen mislukt. Je bent ofwel niet aangemeld, de plant die je opgaf bestaat niet, of de plant stond al in je verlanglijstje.");
         System.out.println("\n");
-        wishlistService.displayWishlist(username);
     }
 
     //5. Verwijderen uit verlanglijstje
     private static void removeFromWishlist() {
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
-
-        wishlistService.displayWishlist(username);
         System.out.println("\nGeef aan welke plant je wil verwijderen uit je verlanglijstje: ");
         int plant = scannerInt.nextInt();
         boolean success = wishlistService.removeFromWishlist(plant, username);
         System.out.println(success ? "De plant werd verwijderd uit je verlanglijstje!" : "Verwijderen mislukt. Je bent ofwel niet aangemeld, de plant die je opgaf bestaat niet, of de plant stond niet in je verlanglijstje.");
-        wishlistService.displayWishlist(username);
     }
 
     //6. Alle favorieten verwijderen uit verlanglijstje
@@ -163,7 +160,6 @@ public class Main {
         System.out.print("Voer je gebruikersnaam in: ");
         String username = scannerText.nextLine();
         System.out.println("\n");
-        wishlistService.displayWishlist(username);
         System.out.print("Ben je zeker dat je je verlanglijstje wil leegmaken? (Y/N): ");
         String answer = scannerText.nextLine();
         switch (answer){
@@ -176,7 +172,6 @@ public class Main {
         boolean success = wishlistService.removeAllFromWishlist(username);
         System.out.println(success ? "Je verlanglijstje werd leeggemaakt." : "Verlanglijstje leegmaken mislukt. Je bent niet aangemeld.");
         System.out.println("\n");
-        wishlistService.displayWishlist(username);
     }
 
     //7. Bekijk verlanglijstje
@@ -187,7 +182,7 @@ public class Main {
         List<Plant> wishlist = wishlistService.displayWishlist(username);
 
         if (wishlist.isEmpty()) {
-            System.out.println("De wishlist van " + username + " is leeg, of " + username + "is niet aangemeld.");
+            System.out.println("De wishlist van " + username + " is leeg, of " + username + " is niet aangemeld.");
         } else {
             System.out.println("\n--- Wishlist van " + username + " ---");
             for (Plant plant : wishlist) {
